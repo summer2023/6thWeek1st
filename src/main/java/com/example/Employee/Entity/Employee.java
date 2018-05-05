@@ -1,15 +1,24 @@
 package com.example.Employee.Entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="t_employee")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty(message="姓名不能为空")
+    @Column(nullable=false,length=20,name="name")
     private String name;
-    private int age;
+
+    @Column(nullable=false,name="age")
+    private Integer age;
+
+    @NotEmpty(message="姓名不能为空")
+    @Column(nullable=false,length=2,name="gender")
     private String gender;
 
     public Long getId() {
@@ -28,7 +37,7 @@ public class Employee {
         this.name=name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
