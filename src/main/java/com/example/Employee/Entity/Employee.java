@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @NotEmpty(message="姓名不能为空")
     @Column(nullable=false,length=20,name="name")
@@ -21,7 +21,13 @@ public class Employee {
     @Column(nullable=false,length=2,name="gender")
     private String gender;
 
-    public Long getId() {
+    public Employee(int id,String name,int age,String gender) {
+        this.id=id;
+        this.name=name;
+        this.age=age;
+        this.gender=gender;
+    }
+    public int getId() {
         return id;
     }
 
