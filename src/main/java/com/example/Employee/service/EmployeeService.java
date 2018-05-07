@@ -1,56 +1,59 @@
 package com.example.Employee.service;
 
 import com.example.Employee.Entity.Employee;
-import com.example.Employee.dao.EmployeeRepositoty;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class EmployeeService {
-    @Autowired
-    private EmployeeRepositoty employeeRepositoty;
+    List<Employee> employees = new ArrayList<>();
 
-    List<Employee> employees = new ArrayList();
-    public EmployeeService() {
-        employees.add(new Employee(0, "小明",20,"男"));
-        employees.add(new Employee(1, "小虹",19,"女"));
-        employees.add(new Employee(2, "小智",25,"男"));
-        employees.add(new Employee(3, "小刚",16,"男"));
-        employees.add(new Employee(4, "小霞",15,"女"));
+    private void validateEmployee(int employeeId) {
+        boolean find = employees.stream().anyMatch(e -> e.getId() == employeeId);
 
     }
 
-    public List<Employee> getEmployees() {
+    public EmployeeService() {
+        employees.add(new Employee(0, "小明", 20, "男"));
+        employees.add(new Employee(1, "小红", 19, "女"));
+        employees.add(new Employee(2, "小智", 25, "男"));
+        employees.add(new Employee(3, "小刚", 16, "男"));
+        employees.add(new Employee(4, "小霞", 15, "女"));
+    }
+
+
+    public List<Employee> getEmployeeList() {
         return employees;
     }
 
 
-    public Employee addEmployee(Employee employee) {
-        return employeeRepositoty.save(employee);
-    }
+    public Employee saveEmployee(Employee employee) {
+        boolean exist = employees.stream().anyMatch(e -> e.getId() == employee.getId());
 
-    public void deleteEmployee(Employee employee) {
-        employeeRepositoty.delete(employee);
-    }
-
-    public Employee updateEmployee(Employee employee) {
-        return employeeRepositoty.save(employee);
-    }
-
-    public List<Employee> listEmployees() {
-        return employeeRepositoty.findAll();
-    }
-
-    public Employee findEmployeeByName(String name){
-        Employee employee=null;
-        try {
-            employee = employeeRepositoty.findByEmployeeName(name);
-        } catch (Exception e) {
-
-        }
+        employees.add(employee);
         return employee;
+    }
+
+    public Employee getEmployee(int id) {
+        this.validateEmployee(id);
+        return employees.stream().filter(item -> item.getId() == id).findFirst().get();
+    }
+
+
+    public Employee updateEmployee(int id, Employee newEmployee) {
+        this.validateEmployee(id);
+        Employee employee = employees.stream().filter(item -> item.getId() == id).findFirst().get();
+        employee.setAge(newEmployee.getAge());
+        employee.setGender(newEmployee.getGender());
+        employee.setName(newEmployee.getName());
+        return employee;
+    }
+
+    public void deleteEmployee(int id) {
+        this.validateEmployee(id);
+        Employee employee = employees.stream().filter(item -> item.getId() == id).findFirst().get();
+        employees.remove(employee);
     }
 }
